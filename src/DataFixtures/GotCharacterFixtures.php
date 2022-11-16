@@ -28,8 +28,10 @@ class GotCharacterFixtures extends Fixture implements DependentFixtureInterface
             $character->setFamily($this->getReference(
                 'family_' . FamilyFixtures::FAMILIES[rand(0, count(FamilyFixtures::FAMILIES) - 1)]
             ));
+            // using the family inside the character, once it has been set, to set the last name of this record
             $character->setLastName($character->getFamily()->getName());
             $manager->persist($character);
+            $this->addReference('character_' . $i, $character);
         }
         $manager->flush();
     }

@@ -28,9 +28,13 @@ class GotCharacter
     #[ORM\OneToMany(mappedBy: 'gotCharacter', targetEntity: Pet::class, orphanRemoval: true)]
     private Collection $pets;
 
+    #[ORM\ManyToMany(targetEntity: Episode::class, mappedBy: 'gotCharacters')]
+    private Collection $episodes;
+
     public function __construct()
     {
         $this->pets = new ArrayCollection();
+        $this->episodes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -99,6 +103,33 @@ class GotCharacter
             if ($pet->getGotCharacter() === $this) {
                 $pet->setGotCharacter(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Episode>
+     */
+    public function getEpisodes(): Collection
+    {
+        return $this->episodes;
+    }
+
+    public function addEpisode(Episode $episode): self
+    {
+        if (!$this->episodes->contains($episode)) {
+            $this->episodes->add($episode);
+            $episode->addGotCharacter($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEpisode(Episode $episode): self
+    {
+        if ($this->episodes->removeElement($episode)) {
+            $episode->removeGotCharacter($this);
         }
 
         return $this;
