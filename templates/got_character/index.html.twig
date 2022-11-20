@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}characters{% endblock %}
+
+{% block body %}
+<div>
+    <ul>
+        {% for character in characters %}
+            <li>name: {{character.firstname}} {{character.lastname}}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
